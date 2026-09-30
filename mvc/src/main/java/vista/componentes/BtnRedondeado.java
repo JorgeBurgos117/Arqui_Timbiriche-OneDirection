@@ -12,9 +12,6 @@ import javax.swing.JButton;
 import modelo.PaletaColor;
 import vista.util.Styles;
 
-/**
- * Boton plano con esquinas redondeadas, para no depender del LookAndFeel.
- */
 public class BtnRedondeado extends JButton {
 
     private final Color colorFondo;

@@ -9,10 +9,6 @@ import java.awt.RenderingHints;
 import javax.swing.JPanel;
 import vista.util.Styles;
 
-/**
- * Avatar generico dibujado por codigo (circulo + silueta), tintado con la
- * paleta del jugador. Si despues quieres imagenes, aqui va el setIcon.
- */
 public class PnlAvatar extends JPanel {
 
     private Color colorFondo = Color.LIGHT_GRAY;
@@ -44,11 +40,10 @@ public class PnlAvatar extends JPanel {
         int x0 = (getWidth() - d) / 2;
         int y0 = (getHeight() - d) / 2;
 
-        // Circulo de fondo
         g2.setColor(colorFondo);
         g2.fillOval(x0, y0, d, d);
 
-        // Silueta: cabeza + hombros
+        g2.setClip(new java.awt.geom.Ellipse2D.Double(x0, y0, d, d));
         g2.setColor(colorSilueta);
         int diamCabeza = Math.round(d * 0.30f);
         int xCabeza = x0 + (d - diamCabeza) / 2;
@@ -60,8 +55,8 @@ public class PnlAvatar extends JPanel {
         int xCuerpo = x0 + (d - anchoCuerpo) / 2;
         int yCuerpo = y0 + Math.round(d * 0.56f);
         g2.fillArc(xCuerpo, yCuerpo, anchoCuerpo, altoCuerpo, 0, 180);
+        g2.setClip(null);
 
-        // Borde
         g2.setColor(colorBorde);
         g2.setStroke(new BasicStroke(Styles.GROSOR_BORDE_AVATAR));
         int off = Styles.GROSOR_BORDE_AVATAR / 2;

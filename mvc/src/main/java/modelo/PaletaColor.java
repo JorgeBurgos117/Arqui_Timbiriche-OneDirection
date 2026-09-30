@@ -1,13 +1,24 @@
 package modelo;
 
 import java.awt.Color;
-import vista.util.Styles;
+import java.util.List;
 
-/**
- * Todas las variantes de color de un jugador, derivadas de un color base.
- * Asi agregar un color nuevo es una sola linea en Styles.PALETAS.
- */
-public class PaletaColor {
+public final class PaletaColor {
+
+    public static final float FACTOR_PASTEL = 0.60f;
+    public static final float FACTOR_CLARO = 0.84f;
+    public static final float FACTOR_OSCURO = 0.22f;
+
+    public static final List<PaletaColor> DISPONIBLES = List.of(
+            new PaletaColor("Verde", new Color(46, 175, 80)),
+            new PaletaColor("Amarillo", new Color(200, 160, 10)),
+            new PaletaColor("Rojo", new Color(215, 45, 45)),
+            new PaletaColor("Azul", new Color(25, 110, 220)),
+            new PaletaColor("Morado", new Color(140, 70, 200)),
+            new PaletaColor("Naranja", new Color(235, 120, 25)),
+            new PaletaColor("Turquesa", new Color(20, 165, 170)),
+            new PaletaColor("Rosa", new Color(230, 80, 155))
+    );
 
     private final String nombre;
     private final Color fuerte;
@@ -18,12 +29,11 @@ public class PaletaColor {
     public PaletaColor(String nombre, Color base) {
         this.nombre = nombre;
         this.fuerte = base;
-        this.pastel = mezclar(base, Color.WHITE, Styles.FACTOR_PASTEL);
-        this.claro = mezclar(base, Color.WHITE, Styles.FACTOR_CLARO);
-        this.oscuro = mezclar(base, Color.BLACK, Styles.FACTOR_OSCURO);
+        this.pastel = mezclar(base, Color.WHITE, FACTOR_PASTEL);
+        this.claro = mezclar(base, Color.WHITE, FACTOR_CLARO);
+        this.oscuro = mezclar(base, Color.BLACK, FACTOR_OSCURO);
     }
 
-    /** Mezcla dos colores; t=0 devuelve a, t=1 devuelve b. */
     public static Color mezclar(Color a, Color b, float t) {
         float u = Math.max(0f, Math.min(1f, t));
         int r = Math.round(a.getRed() + (b.getRed() - a.getRed()) * u);
@@ -50,5 +60,10 @@ public class PaletaColor {
 
     public Color getOscuro() {
         return oscuro;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
