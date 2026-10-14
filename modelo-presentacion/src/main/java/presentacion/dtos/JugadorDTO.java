@@ -53,6 +53,7 @@ public class JugadorDTO {
     public boolean isEnTurno() {
         return enTurno;
     }
+
     public void setEnTurno(boolean enTurno) {
         this.enTurno = enTurno;
     }

@@ -19,12 +19,10 @@ public class Cuadro {
         this.columna = columna;
     }
 
-    /** ¿La línea es uno de los 4 lados de este cuadro? */
     public boolean esLadoDe(Linea linea) {
         return ladoDe(linea) != null;
     }
 
-    /** Guarda la línea en su lado; si no es lado de este cuadro, no hace nada. */
     public void agregarLinea(Linea linea) {
         Lado lado = ladoDe(linea);
         if (lado == null) {
