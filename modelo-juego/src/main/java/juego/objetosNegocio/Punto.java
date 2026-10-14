@@ -22,9 +22,9 @@ public final class Punto {
     }
 
     public boolean esAdyacente(Punto otro) {
-        int df = Math.abs(fila - otro.fila);
-        int dc = Math.abs(columna - otro.columna);
-        return df + dc == 1;
+        int df = Math.abs(fila - otro.fila);  // distancia de filas absoluta
+        int dc = Math.abs(columna - otro.columna); // distancia de columnas absoluta
+        return df + dc == 1; // si son contiguos en una cuadricula debe ser 1, de lo contrario no es.
     }
 
     public boolean esIgual(int fila, int columna) {
