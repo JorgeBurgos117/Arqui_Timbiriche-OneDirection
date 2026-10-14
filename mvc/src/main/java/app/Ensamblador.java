@@ -21,7 +21,7 @@ public class Ensamblador {
 
     // Valores fijos mientras no existe el caso de uso del menú
     private static final List<String> NOMBRES = List.of("Danna", "Regina", "Mariana", "Claudia");
-    private static final int PUNTOS_POR_LADO = 10;
+    private static final int PUNTOS_POR_LADO = 30;
     private static final int MARGEN = 20;
 
     public void ensamblar() {
