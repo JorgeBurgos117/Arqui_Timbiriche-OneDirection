@@ -19,7 +19,7 @@ import vista.util.Styles;
 public class FrmJuego extends JFrame implements IObservadorVista {
 
     private final IModeloVista modelo;
-    private final PnlTablero pnlTablero;
+    private final VistaTablero pnlTablero;
     private final PnlContenido pnlContenido;
     private IControlVista control;
 
@@ -30,7 +30,7 @@ public class FrmJuego extends JFrame implements IObservadorVista {
     public FrmJuego(IModeloVista modelo) {
         super(Styles.TITULO_VENTANA);
         this.modelo = modelo;
-        this.pnlTablero = new PnlTablero(modelo);
+        this.pnlTablero = new VistaTablero(modelo);
         this.pnlContenido = new PnlContenido(modelo.getJugadores(), pnlTablero, this::abrirOpciones);
 
         setContentPane(pnlContenido);

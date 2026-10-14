@@ -2,7 +2,7 @@ package app;
 
 import java.util.Random;
 import controlador.ControlMenu;
-import controlador.ControlVista;
+import controlador.ControlEjercerTurno;
 import controlador.ILanzadorPartida;
 
 import juego.objetosNegocio.TamanioTablero;
@@ -50,7 +50,7 @@ public class Ensamblador implements ILanzadorPartida {
         FrmJuego frmJuego = new FrmJuego(datosVisuales);
         datosVisuales.agregarObservador(frmJuego);
 
-        ControlVista controlVista = new ControlVista(controlModelo, () -> {
+        ControlEjercerTurno controlVista = new ControlEjercerTurno(controlModelo, () -> {
             publicador.detener();
             datosJuego.quitarObservador(datosVisuales);
             datosVisuales.quitarObservador(frmJuego);

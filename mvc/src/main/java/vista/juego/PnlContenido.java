@@ -18,9 +18,9 @@ public class PnlContenido extends JLayeredPane {
 
     private final JPanel pnlJuego = new JPanel(new BorderLayout());
     private final PnlContenedorMenu pnlContenedorMenu;
-    private final Map<Integer, PnlJugador> panelesJugador = new LinkedHashMap<>();
+    private final Map<Integer, VistaJugadores> panelesJugador = new LinkedHashMap<>();
 
-    public PnlContenido(List<JugadorVisual> jugadores, PnlTablero pnlTablero, Runnable abrirOpciones) {
+    public PnlContenido(List<JugadorVisual> jugadores, VistaTablero pnlTablero, Runnable abrirOpciones) {
         this.pnlContenedorMenu = new PnlContenedorMenu(abrirOpciones);
 
         pnlJuego.setBackground(Styles.COLOR_FONDO);
@@ -35,7 +35,7 @@ public class PnlContenido extends JLayeredPane {
 
         boolean hayNorte = false;
         for (JugadorVisual jugador : jugadores) {
-            PnlJugador panel = new PnlJugador(jugador.ubicacion());
+            VistaJugadores panel = new VistaJugadores(jugador.ubicacion());
             panel.actualizar(jugador);
             panelesJugador.put(jugador.id(), panel);
             pnlJuego.add(panel, aBorderLayout(jugador.ubicacion()));

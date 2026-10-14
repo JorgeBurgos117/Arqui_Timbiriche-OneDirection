@@ -4,13 +4,13 @@ import java.util.Map;
 import modelo.IControlModelo;
 import modelo.PaletaColor;
 
-public class ControlVista implements IControlVista {
+public class ControlEjercerTurno implements IControlVista {
 
     private final IControlModelo controlModelo;
     private final Runnable alSalir;
     private boolean salio = false;
 
-    public ControlVista(IControlModelo controlModelo, Runnable alSalir) {
+    public ControlEjercerTurno(IControlModelo controlModelo, Runnable alSalir) {
         this.controlModelo = controlModelo;
         this.alSalir = alSalir;
     }

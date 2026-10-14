@@ -26,12 +26,12 @@ import modelo.LineaVisual;
 import modelo.PaletaColor;
 import vista.util.Styles;
 
-public class PnlTablero extends JPanel {
+public class VistaTablero extends JPanel {
 
     private final IModeloVista modelo;
     private IControlVista control;
 
-    public PnlTablero(IModeloVista modelo) {
+    public VistaTablero(IModeloVista modelo) {
         this.modelo = modelo;
         setOpaque(false);
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

@@ -17,7 +17,7 @@ import modelo.Ubicacion;
 import vista.componentes.PnlAvatar;
 import vista.util.Styles;
 
-public class PnlJugador extends JPanel {
+public class VistaJugadores extends JPanel {
 
     private final Ubicacion ubicacion;
 
@@ -28,7 +28,7 @@ public class PnlJugador extends JPanel {
 
     private JugadorVisual datos;
 
-    public PnlJugador(Ubicacion ubicacion) {
+    public VistaJugadores(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
         setOpaque(false);
         setLayout(new BorderLayout());
