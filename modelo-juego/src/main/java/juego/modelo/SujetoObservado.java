@@ -5,21 +5,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class SujetoObservado {
 
-    private final List<ObservadorModeloJuego> observadores = new CopyOnWriteArrayList<>();
+    private final List<IObservadorModeloJuego> observadores = new CopyOnWriteArrayList<>();
 
-    public void agregarObservador(ObservadorModeloJuego observador) {
+    public void agregarObservador(IObservadorModeloJuego observador) {
         if (observador != null && !observadores.contains(observador)) {
             observadores.add(observador);
         }
     }
 
-    public void eliminarObservador(ObservadorModeloJuego observador) {
+    public void eliminarObservador(IObservadorModeloJuego observador) {
         observadores.remove(observador);
     }
 
-    /** protected (#): solo la clase hija decide cuándo avisar. */
     protected void notificarObservadores(EventoModelo evento) {
-        for (ObservadorModeloJuego o : observadores) {
+        for (IObservadorModeloJuego o : observadores) {
             o.actualizar(evento);
         }
     }
