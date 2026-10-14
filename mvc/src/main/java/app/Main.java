@@ -11,7 +11,7 @@ public class Main {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ignored) {
             }
-            new Ensamblador().arrancar();
+            new Ensamblador().ensamblar();
         });
     }
 }
