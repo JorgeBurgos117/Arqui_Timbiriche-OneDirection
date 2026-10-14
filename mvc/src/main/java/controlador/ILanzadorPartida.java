@@ -1,6 +1,8 @@
 package controlador;
 
+import java.util.List;
+
 public interface ILanzadorPartida {
 
-    void lanzar(int jugadores);
+    void ensamblar(List<String> nombres);
 }

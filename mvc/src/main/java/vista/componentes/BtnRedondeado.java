@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import modelo.PaletaColor;
+import vista.util.PaletaColor;
 import vista.util.Styles;
 
 public class BtnRedondeado extends JButton {

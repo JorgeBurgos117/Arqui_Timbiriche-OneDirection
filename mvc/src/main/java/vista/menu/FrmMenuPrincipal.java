@@ -1,5 +1,6 @@
 package vista.menu;
 
+import controlador.ControlMenu;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -11,17 +12,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import controlador.IControlMenu;
-import modelo.ModeloMenu;
-import modelo.OpcionPartida;
+import modeloPresentacion.ModeloMenu;
+import modeloPresentacion.OpcionPartida;
 import vista.componentes.BtnRedondeado;
 import vista.util.Styles;
 
 public class FrmMenuPrincipal extends JFrame {
 
     private final ModeloMenu modelo;
-    private IControlMenu control;
-
+    private ControlMenu control;
     private final JLabel lblJugadores = new JLabel();
     private int jugadoresSeleccionados;
 
@@ -32,7 +31,7 @@ public class FrmMenuPrincipal extends JFrame {
         construir();
     }
 
-    public void setControl(IControlMenu control) {
+    public void setControl(ControlMenu control) {
         this.control = control;
     }
 

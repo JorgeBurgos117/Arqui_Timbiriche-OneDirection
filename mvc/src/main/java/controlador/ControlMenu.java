@@ -1,19 +1,21 @@
 package controlador;
 
-public class ControlMenu implements IControlMenu {
+import modeloPresentacion.ModeloMenu;
+
+public class ControlMenu {
 
     private final ILanzadorPartida lanzador;
+    private final ModeloMenu modelo;
 
-    public ControlMenu(ILanzadorPartida lanzador) {
+    public ControlMenu(ILanzadorPartida lanzador, ModeloMenu modelo) {
         this.lanzador = lanzador;
+        this.modelo = modelo;
     }
 
-    @Override
     public void iniciarPartida(int jugadores) {
-        lanzador.lanzar(jugadores);
+        lanzador.ensamblar(modelo.getNombresProvisionales(jugadores));
     }
 
-    @Override
     public void salir() {
         System.exit(0);
     }

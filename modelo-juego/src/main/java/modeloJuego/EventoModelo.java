@@ -1,0 +1,11 @@
+package modeloJuego;
+
+public enum EventoModelo {
+    SELECCION_CAMBIADA,
+    JUGADA_REALIZADA,
+    JUGADA_INVALIDA,
+    PARTIDA_TERMINADA,
+    JUGADOR_ABANDONO,
+    FIN_PROPUESTO,
+    FIN_RECHAZADO
+}

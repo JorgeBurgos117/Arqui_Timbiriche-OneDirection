@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
 import javax.swing.JPanel;
 import vista.util.Styles;
 
@@ -43,25 +44,19 @@ public class PnlAvatar extends JPanel {
         g2.setColor(colorFondo);
         g2.fillOval(x0, y0, d, d);
 
-        g2.setClip(new java.awt.geom.Ellipse2D.Double(x0, y0, d, d));
+        g2.setClip(new Ellipse2D.Double(x0, y0, d, d));
         g2.setColor(colorSilueta);
         int diamCabeza = Math.round(d * 0.30f);
-        int xCabeza = x0 + (d - diamCabeza) / 2;
-        int yCabeza = y0 + Math.round(d * 0.20f);
-        g2.fillOval(xCabeza, yCabeza, diamCabeza, diamCabeza);
-
+        g2.fillOval(x0 + (d - diamCabeza) / 2, y0 + Math.round(d * 0.20f), diamCabeza, diamCabeza);
         int anchoCuerpo = Math.round(d * 0.60f);
         int altoCuerpo = Math.round(d * 0.70f);
-        int xCuerpo = x0 + (d - anchoCuerpo) / 2;
-        int yCuerpo = y0 + Math.round(d * 0.56f);
-        g2.fillArc(xCuerpo, yCuerpo, anchoCuerpo, altoCuerpo, 0, 180);
+        g2.fillArc(x0 + (d - anchoCuerpo) / 2, y0 + Math.round(d * 0.56f), anchoCuerpo, altoCuerpo, 0, 180);
         g2.setClip(null);
 
         g2.setColor(colorBorde);
         g2.setStroke(new BasicStroke(Styles.GROSOR_BORDE_AVATAR));
         int off = Styles.GROSOR_BORDE_AVATAR / 2;
         g2.drawOval(x0 + off, y0 + off, d - Styles.GROSOR_BORDE_AVATAR, d - Styles.GROSOR_BORDE_AVATAR);
-
         g2.dispose();
     }
 }

@@ -1,62 +1,104 @@
 package app;
 
-import java.util.Random;
+import controlador.ControlEjercerTurno;
 import controlador.ControlMenu;
-import controlador.ControlVista;
+import controlador.ControlOpcionesPartida;
 import controlador.ILanzadorPartida;
-import juego.objetosNegocio.TamanioTablero;
-import juego.modelo.ColaAcciones;
-import juego.modelo.ControlJuego;
-import juego.modelo.DatosJuego;
-import juego.red.BitacoraConsola;
-import juego.red.PublicadorAcciones;
-import modelo.ControlModelo;
-import modelo.DatosVisuales;
-import modelo.ModeloMenu;
-import vista.juego.FrmJuego;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import modeloJuego.FachadaModeloJuego;
+import modeloJuego.objetosNegocio.Jugador;
+import modeloJuego.objetosNegocio.Partida;
+import modeloJuego.objetosNegocio.Tablero;
+import modeloJuego.objetosNegocio.TamanioTablero;
+import modeloPresentacion.ControlModeloPresentacion;
+import modeloPresentacion.FachadaModeloPresentacion;
+import modeloPresentacion.ModeloMenu;
+import modeloPresentacion.ReceptorMovimientos;
+import modeloPresentacion.TraductorModeloJuego;
+import red.TransmisorRed;
+import vista.FrmJuego;
+import vista.VistaJugadores;
+import vista.VistaResultados;
+import vista.VistaTablero;
 import vista.menu.FrmMenuPrincipal;
+import vista.util.PaletaColor;
 import vista.util.Styles;
 
 public class Ensamblador implements ILanzadorPartida {
 
-    private static final int ID_LOCAL = 1;
-    private static final boolean TODOS_LOCALES = true;
+    // null = todos los jugadores comparten esta ventana; con red sera el nombre del jugador de este equipo.
+    private static final String JUGADOR_LOCAL = null;
 
     private final ModeloMenu modeloMenu = new ModeloMenu();
+    private final Random azar = new Random();
     private FrmMenuPrincipal menu;
 
     public void arrancar() {
         menu = new FrmMenuPrincipal(modeloMenu);
-        menu.setControl(new ControlMenu(this));
+        menu.setControl(new ControlMenu(this, modeloMenu));
         menu.mostrar();
     }
 
     @Override
-    public void lanzar(int jugadores) {
-        TamanioTablero tamanio = TamanioTablero.paraJugadores(jugadores);
-        DatosJuego datosJuego = new DatosJuego(tamanio, modeloMenu.getNombresProvisionales(jugadores), new Random());
-        ColaAcciones cola = new ColaAcciones();
-        ControlJuego controlJuego = new ControlJuego(datosJuego, cola);
+    public void ensamblar(List<String> nombres) {
+        List<Jugador> registrados = new ArrayList<>();
+        for (int i = 0; i < nombres.size(); i++) {
+            String color = PaletaColor.DISPONIBLES.get(i).getNombre();
+            registrados.add(new Jugador(nombres.get(i), "avatar" + (i + 1), color));
+        }
+        List<Jugador> ordenTurnos = new ArrayList<>(registrados);
+        Collections.shuffle(ordenTurnos, azar);
 
-        PublicadorAcciones publicador = new PublicadorAcciones(cola);
-        publicador.agregarDestino(new BitacoraConsola());
-        publicador.iniciar();
+        int puntos = TamanioTablero.paraJugadores(nombres.size()).getPuntosPorLado();
+        Partida partida = new Partida(new Tablero(puntos, puntos), ordenTurnos);
+        FachadaModeloJuego fachadaJuego = new FachadaModeloJuego(partida);
 
-        DatosVisuales datosVisuales = new DatosVisuales(datosJuego, ID_LOCAL, TODOS_LOCALES, Styles.LADO_AREA_TABLERO);
-        datosJuego.agregarObservador(datosVisuales);
-        ControlModelo controlModelo = new ControlModelo(datosVisuales, controlJuego);
+        TransmisorRed transmisor = new TransmisorRed(fachadaJuego);
+        fachadaJuego.agregarObservador(transmisor);
+        transmisor.iniciar();
 
-        FrmJuego frmJuego = new FrmJuego(datosVisuales);
-        datosVisuales.agregarObservador(frmJuego);
+        int tamanoCelda = (Styles.LADO_AREA_TABLERO - 2 * Styles.MARGEN_TABLERO) / (puntos - 1);
+        TraductorModeloJuego traductor = new TraductorModeloJuego(tamanoCelda, Styles.MARGEN_TABLERO);
+        for (Jugador jugador : registrados) {
+            traductor.asignarColor(jugador.getNombre(), PaletaColor.porNombre(jugador.getColor()).getColor());
+        }
+        ControlModeloPresentacion controlModelo =
+                new ControlModeloPresentacion(fachadaJuego, fachadaJuego, traductor, JUGADOR_LOCAL);
+        ReceptorMovimientos receptor = new ReceptorMovimientos(fachadaJuego, traductor, JUGADOR_LOCAL);
+        fachadaJuego.agregarObservador(receptor);
+        FachadaModeloPresentacion fachadaPresentacion = new FachadaModeloPresentacion(controlModelo, receptor);
 
-        ControlVista controlVista = new ControlVista(controlModelo, () -> {
-            publicador.detener();
-            datosJuego.quitarObservador(datosVisuales);
-            datosVisuales.quitarObservador(frmJuego);
+        ControlEjercerTurno controlTurno = new ControlEjercerTurno();
+        controlTurno.setModelo(fachadaPresentacion);
+        ControlOpcionesPartida controlOpciones = new ControlOpcionesPartida();
+        controlOpciones.setModelo(fachadaPresentacion);
+
+        VistaTablero vistaTablero = new VistaTablero();
+        vistaTablero.setModelo(fachadaPresentacion);
+        vistaTablero.setControlador(controlTurno);
+        VistaJugadores vistaJugadores = new VistaJugadores(JUGADOR_LOCAL);
+        vistaJugadores.setModelo(fachadaPresentacion);
+        fachadaPresentacion.agregarObservador(vistaTablero);
+        fachadaPresentacion.agregarObservador(vistaJugadores);
+        receptor.sincronizar();
+
+        FrmJuego frmJuego = new FrmJuego(vistaTablero, vistaJugadores, fachadaPresentacion, controlTurno, controlOpciones);
+        VistaResultados vistaResultados = new VistaResultados(controlOpciones::salirAlMenu);
+        vistaResultados.setModelo(fachadaPresentacion);
+        vistaResultados.setPropietario(frmJuego);
+        fachadaPresentacion.agregarObservador(frmJuego);
+        fachadaPresentacion.agregarObservador(vistaResultados);
+
+        controlOpciones.setAlSalir(() -> {
+            transmisor.detener();
+            fachadaJuego.eliminarObservador(transmisor);
+            fachadaJuego.eliminarObservador(receptor);
             frmJuego.dispose();
             menu.mostrar();
         });
-        frmJuego.setControl(controlVista);
 
         menu.ocultar();
         frmJuego.mostrar();

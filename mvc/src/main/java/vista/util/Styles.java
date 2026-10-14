@@ -12,11 +12,17 @@ public final class Styles {
     public static final Color COLOR_FONDO = Color.WHITE;
 
     public static final int LADO_AREA_TABLERO = 540;
+    public static final int MARGEN_TABLERO = 20;
     public static final int PADDING_AREA_TABLERO = 20;
     public static final Color COLOR_FONDO_TABLERO = new Color(246, 247, 249);
     public static final int ARCO_FONDO_TABLERO = 18;
     public static final Color COLOR_PUNTO_NEUTRO = new Color(55, 55, 55);
-    public static final Color COLOR_LINEA_HUERFANA = new Color(200, 200, 205);
+    public static final Color COLOR_PUNTO_HOVER = new Color(150, 155, 165);
+
+    public static final Color COLOR_ADVERTENCIA_FONDO = new Color(40, 44, 52, 225);
+    public static final Color COLOR_ADVERTENCIA_TEXTO = Color.WHITE;
+    public static final Font FUENTE_ADVERTENCIA = new Font("Segoe UI", Font.BOLD, 13);
+    public static final int DURACION_ADVERTENCIA_MS = 2500;
 
     public static final int GROSOR_PANEL_JUGADOR = 150;
     public static final int DIAMETRO_AVATAR = 80;
