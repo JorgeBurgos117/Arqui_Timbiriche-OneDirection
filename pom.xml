@@ -11,6 +11,7 @@
     <modules>
         <module>modelo-juego</module>
         <module>mvc</module>
+        <module>modelo-presentacion</module>
     </modules>
 
     <properties>
@@ -23,6 +24,11 @@
             <dependency>
                 <groupId>org.example</groupId>
                 <artifactId>modelo-juego</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>modelo-presentacion</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
