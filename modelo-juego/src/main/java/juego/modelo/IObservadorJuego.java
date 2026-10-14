@@ -1,6 +1,8 @@
 package juego.modelo;
 
-public interface IObservadorJuego {
+public class ObservadorModeloJuego {
 
-    void update();
+    public void actualizar(EventoModelo evento){
+
+    }
 }
