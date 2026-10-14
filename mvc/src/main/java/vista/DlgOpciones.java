@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import vista.componentes.BtnRedondeado;
+import vista.util.Dialogos;
 import vista.util.PaletaColor;
 import vista.util.Styles;
 
@@ -23,14 +24,14 @@ public class DlgOpciones extends JDialog {
     private final Window propietario;
     private final VistaJugadores vistaJugadores;
     private final ControlOpcionesPartida control;
-    private final JugadorDTO actor;
+    private final JugadorDTO jugador;
 
     public DlgOpciones(Window propietario, VistaJugadores vistaJugadores, ControlOpcionesPartida control) {
-        super(propietario, Styles.TITULO_DLG_OPCIONES, ModalityType.APPLICATION_MODAL);
+        super(propietario, Styles.TITULO_DLG_OPCIONES, ModalityType.DOCUMENT_MODAL);
         this.propietario = propietario;
         this.vistaJugadores = vistaJugadores;
         this.control = control;
-        this.actor = vistaJugadores.getJugadorEnTurno();
+        this.jugador = vistaJugadores.getJugadorLocal();
         construir();
     }
 
@@ -41,12 +42,12 @@ public class DlgOpciones extends JDialog {
         int m = Styles.MARGEN_DLG;
         contenido.setBorder(BorderFactory.createEmptyBorder(m, m, m, m));
 
-        if (actor != null) {
-            JLabel lblActor = new JLabel("En turno: " + actor.getNombre());
-            lblActor.setFont(Styles.FUENTE_DLG_NEGRITA);
-            lblActor.setForeground(PaletaColor.oscuro(actor.getColor()));
-            lblActor.setAlignmentX(Component.CENTER_ALIGNMENT);
-            contenido.add(lblActor);
+        if (jugador != null) {
+            JLabel lblJugador = new JLabel("Jugador: " + jugador.getNombre());
+            lblJugador.setFont(Styles.FUENTE_DLG_NEGRITA);
+            lblJugador.setForeground(PaletaColor.oscuro(jugador.getColor()));
+            lblJugador.setAlignmentX(Component.CENTER_ALIGNMENT);
+            contenido.add(lblJugador);
             contenido.add(Box.createVerticalStrut(Styles.SEPARACION_BOTONES_DLG));
         }
         contenido.add(crearBoton("CAMBIAR COLORES", Styles.COLOR_BOTON_FONDO, this::cambiarColores));
@@ -77,28 +78,24 @@ public class DlgOpciones extends JDialog {
     }
 
     private void abandonarPartida() {
-        if (actor == null) {
-            return;
-        }
-        int r = JOptionPane.showConfirmDialog(this,
-                "¿" + actor.getNombre() + " abandona la partida?\nSus cuadros desaparecerán del tablero.",
-                "Abandonar partida", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (r == JOptionPane.YES_OPTION) {
-            dispose();
-            control.abandonar();
-        }
+        Dialogos.preguntar(this,
+                "¿Abandonar la partida?\nTus cuadros desaparecerán y se cerrará esta ventana.",
+                "Abandonar partida", JOptionPane.WARNING_MESSAGE, acepta -> {
+                    if (acepta) {
+                        dispose();
+                        control.abandonar();
+                    }
+                });
     }
 
     private void terminarPartida() {
-        if (actor == null) {
-            return;
-        }
-        int r = JOptionPane.showConfirmDialog(this,
-                "¿" + actor.getNombre() + " propone terminar la partida?\nTodos los demás deben estar de acuerdo.",
-                "Terminar partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (r == JOptionPane.YES_OPTION) {
-            dispose();
-            control.proponerFin();
-        }
+        Dialogos.preguntar(this,
+                "¿Proponer terminar la partida?\nTodos los demás jugadores deben estar de acuerdo.",
+                "Terminar partida", JOptionPane.QUESTION_MESSAGE, acepta -> {
+                    if (acepta) {
+                        dispose();
+                        control.proponerFin();
+                    }
+                });
     }
 }

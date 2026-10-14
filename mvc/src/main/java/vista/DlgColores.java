@@ -24,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import vista.componentes.BtnRedondeado;
+import vista.util.Dialogos;
 import vista.util.PaletaColor;
 import vista.util.Styles;
 
@@ -33,7 +34,7 @@ public class DlgColores extends JDialog {
     private final Predicate<Map<String, Color>> aplicar;
 
     public DlgColores(Window propietario, List<JugadorDTO> jugadores, Predicate<Map<String, Color>> aplicar) {
-        super(propietario, "Colores del tablero", ModalityType.APPLICATION_MODAL);
+        super(propietario, "Colores del tablero", ModalityType.DOCUMENT_MODAL);
         this.aplicar = aplicar;
 
         int m = Styles.MARGEN_DLG;
@@ -78,7 +79,7 @@ public class DlgColores extends JDialog {
         if (aplicar.test(seleccion)) {
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Cada jugador debe tener un color distinto.",
+            Dialogos.avisar(this, "Cada jugador debe tener un color distinto.",
                     "Colores repetidos", JOptionPane.WARNING_MESSAGE);
         }
     }

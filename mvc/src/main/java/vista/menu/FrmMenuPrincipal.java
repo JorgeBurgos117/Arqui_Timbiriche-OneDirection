@@ -81,7 +81,7 @@ public class FrmMenuPrincipal extends JFrame {
         lblJugadores.setFont(Styles.FUENTE_DLG);
         contenido.add(centrado(lblJugadores));
         contenido.add(Box.createVerticalStrut(4));
-        JLabel lblNota = new JLabel("(nombres y avatares provisionales; todos juegan en esta ventana)");
+        JLabel lblNota = new JLabel("(nombres y avatares provisionales; se abre una ventana por jugador)");
         lblNota.setFont(Styles.FUENTE_NOTA_MENU);
         lblNota.setForeground(Styles.COLOR_TEXTO_SECUNDARIO);
         contenido.add(centrado(lblNota));

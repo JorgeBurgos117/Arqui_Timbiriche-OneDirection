@@ -7,15 +7,15 @@ import modeloPresentacion.IOperacionesModeloPresentacion;
 public class ControlOpcionesPartida {
 
     private IOperacionesModeloPresentacion modelo;
-    private Runnable alSalir;
-    private boolean salio = false;
+    private Runnable alCerrar;
+    private boolean cerrada = false;
 
     public void setModelo(IOperacionesModeloPresentacion modelo) {
         this.modelo = modelo;
     }
 
-    public void setAlSalir(Runnable alSalir) {
-        this.alSalir = alSalir;
+    public void setAlCerrar(Runnable alCerrar) {
+        this.alCerrar = alCerrar;
     }
 
     public boolean cambiarColores(Map<String, Color> colores) {
@@ -23,6 +23,7 @@ public class ControlOpcionesPartida {
     }
 
     public void abandonar() {
+        cerrarVentana();
         if (modelo != null) {
             modelo.abandonar();
         }
@@ -40,10 +41,10 @@ public class ControlOpcionesPartida {
         }
     }
 
-    public void salirAlMenu() {
-        if (!salio && alSalir != null) {
-            salio = true;
-            alSalir.run();
+    public void cerrarVentana() {
+        if (!cerrada && alCerrar != null) {
+            cerrada = true;
+            alCerrar.run();
         }
     }
 }

@@ -25,6 +25,7 @@ import modeloPresentacion.IConsultaModeloPresentacion;
 import modeloPresentacion.ObservadorPresentacion;
 import vista.componentes.BtnRedondeado;
 import vista.componentes.PnlJugador;
+import vista.util.Dialogos;
 import vista.util.Styles;
 import vista.util.Ubicacion;
 
@@ -38,10 +39,12 @@ public class FrmJuego extends JFrame implements ObservadorPresentacion {
     private final JPanel pnlBotonOpciones = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
     private boolean terminada = false;
     private boolean votoEnPantalla = false;
+    private boolean teniaTurno = false;
 
-    public FrmJuego(VistaTablero vistaTablero, VistaJugadores vistaJugadores, IConsultaModeloPresentacion modelo,
-                    ControlEjercerTurno controlTurno, ControlOpcionesPartida controlOpciones) {
-        super(Styles.TITULO_VENTANA);
+    public FrmJuego(String titulo, VistaTablero vistaTablero, VistaJugadores vistaJugadores,
+                    IConsultaModeloPresentacion modelo, ControlEjercerTurno controlTurno,
+                    ControlOpcionesPartida controlOpciones) {
+        super(titulo);
         this.vistaJugadores = vistaJugadores;
         this.modelo = modelo;
         this.controlTurno = controlTurno;
@@ -104,19 +107,41 @@ public class FrmJuego extends JFrame implements ObservadorPresentacion {
         setContentPane(capas);
     }
 
-    public void mostrar() {
+    public void preparar() {
         pack();
         setMinimumSize(getSize());
-        setLocationRelativeTo(null);
+    }
+
+    public void mostrar(int x, int y) {
+        setLocation(x, y);
         setVisible(true);
+    }
+
+    public void enfocarSiEsMiTurno() {
+        teniaTurno = modelo.esMiTurno();
+        if (teniaTurno && !terminada) {
+            toFront();
+            requestFocus();
+        }
     }
 
     @Override
     public void actualizar(EventoPresentacion evento) {
-        if (evento == EventoPresentacion.PARTIDA_TERMINADA) {
-            terminada = true;
-        } else if (evento == EventoPresentacion.VOTACION_PENDIENTE) {
-            pedirVoto();
+        switch (evento) {
+            case PARTIDA_TERMINADA -> terminada = true;
+            case VOTACION_PENDIENTE -> pedirVoto();
+            case JUGADORES_ACTUALIZADOS -> {
+                boolean tieneTurno = modelo.esMiTurno();
+                if (tieneTurno && !teniaTurno && !terminada && isVisible()) {
+                    SwingUtilities.invokeLater(() -> {
+                        toFront();
+                        requestFocus();
+                    });
+                }
+                teniaTurno = tieneTurno;
+            }
+            default -> {
+            }
         }
     }
 
@@ -129,14 +154,12 @@ public class FrmJuego extends JFrame implements ObservadorPresentacion {
             return;
         }
         votoEnPantalla = true;
-        SwingUtilities.invokeLater(() -> {
-            int respuesta = JOptionPane.showConfirmDialog(this,
-                    votacion.getProponente() + " propone terminar la partida.\n¿"
-                            + votacion.getVotante() + " está de acuerdo?",
-                    "Terminar partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            votoEnPantalla = false;
-            controlOpciones.votarFin(votacion.getVotante(), respuesta == JOptionPane.YES_OPTION);
-        });
+        SwingUtilities.invokeLater(() -> Dialogos.preguntar(this,
+                votacion.getProponente() + " propone terminar la partida.\n¿Estás de acuerdo?",
+                "Terminar partida", JOptionPane.QUESTION_MESSAGE, acepta -> {
+                    votoEnPantalla = false;
+                    controlOpciones.votarFin(votacion.getVotante(), acepta);
+                }));
     }
 
     private void abrirOpciones() {
@@ -147,13 +170,15 @@ public class FrmJuego extends JFrame implements ObservadorPresentacion {
 
     private void confirmarSalida() {
         if (terminada) {
+            controlOpciones.cerrarVentana();
             return;
         }
-        int r = JOptionPane.showConfirmDialog(this, "¿Salir de la partida y volver al menú principal?",
-                Styles.TITULO_VENTANA, JOptionPane.YES_NO_OPTION);
-        if (r == JOptionPane.YES_OPTION) {
-            controlOpciones.salirAlMenu();
-        }
+        Dialogos.preguntar(this, "¿Abandonar la partida?\nTus cuadros desaparecerán y se cerrará esta ventana.",
+                getTitle(), JOptionPane.WARNING_MESSAGE, acepta -> {
+                    if (acepta) {
+                        controlOpciones.abandonar();
+                    }
+                });
     }
 
     private void registrarEscape() {

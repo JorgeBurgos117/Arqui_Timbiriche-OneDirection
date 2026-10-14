@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
@@ -53,13 +55,22 @@ public class VistaResultados implements ObservadorPresentacion {
         String texto = modelo.getTextoFin();
         List<ResultadoDTO> resultados = modelo.getResultados();
         SwingUtilities.invokeLater(() -> {
-            construir(texto, resultados).setVisible(true);
-            alCerrar.run();
+            if (propietario != null && !propietario.isDisplayable()) {
+                return;
+            }
+            JDialog dialogo = construir(texto, resultados);
+            dialogo.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    alCerrar.run();
+                }
+            });
+            dialogo.setVisible(true);
         });
     }
 
     private JDialog construir(String textoFin, List<ResultadoDTO> resultados) {
-        JDialog dialogo = new JDialog(propietario, "Fin de la partida", JDialog.ModalityType.APPLICATION_MODAL);
+        JDialog dialogo = new JDialog(propietario, "Fin de la partida", JDialog.ModalityType.DOCUMENT_MODAL);
         dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         int m = Styles.MARGEN_DLG;
 
@@ -98,7 +109,7 @@ public class VistaResultados implements ObservadorPresentacion {
         centro.setBorder(BorderFactory.createEmptyBorder(0, m, 0, m));
         centro.add(new JScrollPane(tabla), BorderLayout.CENTER);
 
-        BtnRedondeado btnMenu = new BtnRedondeado("VOLVER AL MENÚ", Styles.COLOR_BOTON_FONDO, Styles.COLOR_BOTON_TEXTO);
+        BtnRedondeado btnMenu = new BtnRedondeado("CERRAR", Styles.COLOR_BOTON_FONDO, Styles.COLOR_BOTON_TEXTO);
         btnMenu.addActionListener(e -> dialogo.dispose());
         JPanel sur = new JPanel(new FlowLayout(FlowLayout.CENTER));
         sur.setBackground(Styles.COLOR_FONDO);

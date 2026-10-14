@@ -66,6 +66,18 @@ public class VistaJugadores implements ObservadorPresentacion {
         return jugadores;
     }
 
+    public JugadorDTO getJugadorLocal() {
+        if (jugadorLocal == null) {
+            return getJugadorEnTurno();
+        }
+        for (JugadorDTO j : jugadores) {
+            if (j.getNombre().equals(jugadorLocal)) {
+                return j;
+            }
+        }
+        return null;
+    }
+
     public JugadorDTO getJugadorEnTurno() {
         for (JugadorDTO j : jugadores) {
             if (j.isEnTurno()) {
