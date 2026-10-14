@@ -22,7 +22,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import modelo.JugadorVisual;
-import modelo.PaletaColor;
+import presentacion.modelo.PaletaColor;
 import vista.componentes.BtnRedondeado;
 import vista.util.Styles;
 

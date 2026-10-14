@@ -1,7 +1,7 @@
 package controlador;
 
+import presentacion.modelo.PaletaColor;
 import java.util.Map;
-import modelo.PaletaColor;
 
 public interface IControlVista {
 

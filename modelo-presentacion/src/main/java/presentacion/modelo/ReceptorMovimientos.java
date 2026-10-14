@@ -113,7 +113,16 @@ public class ReceptorMovimientos implements IObservadorModeloJuego {
 
     private void encolarJugadores() {
         Jugador actual = consultaJuego.getJugadorActual();
-        for (Jugador j : consultaJuego.getJugadores()) {
+        List<Jugador> todos = consultaJuego.getJugadores();
+        // Empieza por el jugador local (la vista lo pone abajo) y sigue en orden de turno
+        int inicio = 0;
+        for (int i = 0; i < todos.size(); i++) {
+            if (todos.get(i).getNombre().equals(jugadorLocal)) {
+                inicio = i;
+            }
+        }
+        for (int k = 0; k < todos.size(); k++) {
+            Jugador j = todos.get((inicio + k) % todos.size());
             colaJugadores.add(traductor.aJugadorDTO(j, j.equals(actual)));
         }
     }

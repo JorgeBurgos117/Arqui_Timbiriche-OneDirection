@@ -1,143 +1,42 @@
 package vista.juego;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import controlador.IControlVista;
-import modelo.Aviso;
-import modelo.IModeloVista;
-import modelo.IObservadorVista;
-import modelo.VotoPendiente;
+import javax.swing.JPanel;
 import vista.util.Styles;
+import vista.util.Ubicacion;
 
-public class FrmJuego extends JFrame implements IObservadorVista {
+/** Ventana de UN jugador: el tablero al centro y los jugadores alrededor. */
+public class FrmJuego extends JFrame {
 
-    private final IModeloVista modelo;
-    private final VistaTablero pnlTablero;
-    private final PnlContenido pnlContenido;
-    private IControlVista control;
+    public FrmJuego(String nombreJugador, VistaTablero vistaTablero, VistaJugadores vistaJugadores) {
+        super(Styles.TITULO_VENTANA + " - " + nombreJugador);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-    private int ultimoAvisoMostrado = 0;
-    private boolean votoEnPantalla = false;
-    private boolean finMostrado = false;
+        JPanel contenido = new JPanel(new BorderLayout());
+        contenido.setBackground(Styles.COLOR_FONDO);
 
-    public FrmJuego(IModeloVista modelo) {
-        super(Styles.TITULO_VENTANA);
-        this.modelo = modelo;
-        this.pnlTablero = new VistaTablero(modelo);
-        this.pnlContenido = new PnlContenido(modelo.getJugadores(), pnlTablero, this::abrirOpciones);
+        int pad = Styles.PADDING_AREA_TABLERO;
+        JPanel areaTablero = new JPanel(new GridBagLayout());
+        areaTablero.setOpaque(false);
+        areaTablero.setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad));
+        areaTablero.add(vistaTablero);
+        contenido.add(areaTablero, BorderLayout.CENTER);
 
-        setContentPane(pnlContenido);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                confirmarSalida();
-            }
-        });
-        registrarEscape();
+        contenido.add(vistaJugadores.getPanel(Ubicacion.NORTE), BorderLayout.NORTH);
+        contenido.add(vistaJugadores.getPanel(Ubicacion.SUR), BorderLayout.SOUTH);
+        contenido.add(vistaJugadores.getPanel(Ubicacion.ESTE), BorderLayout.EAST);
+        contenido.add(vistaJugadores.getPanel(Ubicacion.OESTE), BorderLayout.WEST);
+
+        setContentPane(contenido);
     }
 
-    public void setControl(IControlVista control) {
-        this.control = control;
-        pnlTablero.setControl(control);
-    }
-
-    public void mostrar() {
+    /** indice: para que las ventanas de cada jugador no salgan una encima de otra. */
+    public void mostrar(int indice) {
         pack();
-        setMinimumSize(getSize());
-        setLocationRelativeTo(null);
+        setLocation(40 + indice * 60, 20 + indice * 40);
         setVisible(true);
-        update();
-    }
-
-    @Override
-    public void update() {
-        pnlContenido.actualizarJugadores(modelo.getJugadores());
-        pnlTablero.repaint();
-        revisarAvisos();
-        revisarVoto();
-        revisarFin();
-    }
-
-    private void revisarAvisos() {
-        for (Aviso aviso : modelo.getAvisos()) {
-            if (aviso.numero() > ultimoAvisoMostrado) {
-                ultimoAvisoMostrado = aviso.numero();
-                SwingUtilities.invokeLater(() ->
-                        JOptionPane.showMessageDialog(this, aviso.texto(), Styles.TITULO_VENTANA,
-                                JOptionPane.INFORMATION_MESSAGE));
-            }
-        }
-    }
-
-    private void revisarVoto() {
-        if (votoEnPantalla || finMostrado) {
-            return;
-        }
-        VotoPendiente voto = modelo.getVotoPendiente();
-        if (voto == null) {
-            return;
-        }
-        votoEnPantalla = true;
-        SwingUtilities.invokeLater(() -> {
-            int respuesta = JOptionPane.showConfirmDialog(this,
-                    voto.proponente() + " propone terminar la partida.\n¿" + voto.votante() + " está de acuerdo?",
-                    "Terminar partida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            votoEnPantalla = false;
-            if (control != null) {
-                control.votarFin(voto.idVotante(), respuesta == JOptionPane.YES_OPTION);
-            }
-        });
-    }
-
-    private void revisarFin() {
-        if (finMostrado || !modelo.isPartidaTerminada()) {
-            return;
-        }
-        finMostrado = true;
-        SwingUtilities.invokeLater(() -> {
-            new DlgResultados(this, modelo.getTextoFin(), modelo.getResultados()).setVisible(true);
-            if (control != null) {
-                control.salirAlMenu();
-            }
-        });
-    }
-
-    private void abrirOpciones() {
-        if (control != null && !modelo.isPartidaTerminada()) {
-            new DlgOpciones(this, modelo, control).setVisible(true);
-        }
-    }
-
-    private void confirmarSalida() {
-        if (modelo.isPartidaTerminada()) {
-            return;
-        }
-        int r = JOptionPane.showConfirmDialog(this,
-                "¿Salir de la partida y volver al menú principal?",
-                Styles.TITULO_VENTANA, JOptionPane.YES_NO_OPTION);
-        if (r == JOptionPane.YES_OPTION && control != null) {
-            control.salirAlMenu();
-        }
-    }
-
-    private void registrarEscape() {
-        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-                .put(KeyStroke.getKeyStroke("ESCAPE"), "cancelarSeleccion");
-        getRootPane().getActionMap().put("cancelarSeleccion", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (control != null) {
-                    control.cancelarSeleccion();
-                }
-            }
-        });
     }
 }

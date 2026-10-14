@@ -1,65 +1,74 @@
 package app;
 
-import java.util.Random;
-import controlador.ControlMenu;
 import controlador.ControlEjercerTurno;
-import controlador.ILanzadorPartida;
-
-import juego.objetosNegocio.TamanioTablero;
-import juego.modelo.ColaAcciones;
-import juego.modelo.ControlJuego;
-import juego.modelo.DatosJuego;
-import juego.red.BitacoraConsola;
-import juego.red.PublicadorAcciones;
-import modelo.ControlModelo;
-import modelo.DatosVisuales;
-import modelo.ModeloMenu;
+import java.util.ArrayList;
+import java.util.List;
+import juego.modelo.FachadaModeloJuego;
+import juego.objetosNegocio.Jugador;
+import juego.objetosNegocio.Partida;
+import juego.objetosNegocio.Tablero;
+import presentacion.modelo.ControlModeloPresentacion;
+import presentacion.modelo.FachadaModeloPresentacion;
+import presentacion.modelo.PaletaColor;
+import presentacion.modelo.ReceptorMovimientos;
+import presentacion.modelo.TraductorModeloJuego;
 import vista.juego.FrmJuego;
-import vista.menu.FrmMenuPrincipal;
+import vista.juego.VistaJugadores;
+import vista.juego.VistaTablero;
 import vista.util.Styles;
 
-public class Ensamblador implements ILanzadorPartida {
+public class Ensamblador {
 
-    private static final int ID_LOCAL = 1;
-    private static final boolean TODOS_LOCALES = true;
+    // Valores fijos mientras no existe el caso de uso del menú
+    private static final List<String> NOMBRES = List.of("Danna", "Sammy");
+    private static final int PUNTOS_POR_LADO = 10;
+    private static final int MARGEN = 20;
 
-    private final ModeloMenu modeloMenu = new ModeloMenu();
-    private FrmMenuPrincipal menu;
+    public void ensamblar() {
+        // ---------- Modelo de Juego (uno solo) ----------
+        List<Jugador> jugadores = new ArrayList<>();
+        for (int i = 0; i < NOMBRES.size(); i++) {
+            jugadores.add(new Jugador(i + 1, NOMBRES.get(i), null));
+        }
+        Tablero tablero = new Tablero(PUNTOS_POR_LADO, PUNTOS_POR_LADO);
+        FachadaModeloJuego modeloJuego = new FachadaModeloJuego(new Partida(tablero, jugadores));
 
-    public void arrancar() {
-        menu = new FrmMenuPrincipal(modeloMenu);
-        menu.setControl(new ControlMenu(this));
-        menu.mostrar();
-    }
+        // Tamaño de cada celda para que el tablero quepa en el área de la ventana
+        int tamanoCelda = (Styles.LADO_AREA_TABLERO - 2 * MARGEN) / (PUNTOS_POR_LADO - 1);
+        int ladoTablero = 2 * MARGEN + tamanoCelda * (PUNTOS_POR_LADO - 1);
 
-    @Override
-    public void lanzar(int jugadores) {
-        TamanioTablero tamanio = TamanioTablero.paraJugadores(jugadores);
-        DatosJuego datosJuego = new DatosJuego(tamanio, modeloMenu.getNombresProvisionales(jugadores), new Random());
-        ColaAcciones cola = new ColaAcciones();
-        ControlJuego controlJuego = new ControlJuego(datosJuego, cola);
+        List<ReceptorMovimientos> receptores = new ArrayList<>();
 
-        PublicadorAcciones publicador = new PublicadorAcciones(cola);
-        publicador.agregarDestino(new BitacoraConsola());
-        publicador.iniciar();
+        // ---------- Por cada jugador ----------
+        for (int i = 0; i < jugadores.size(); i++) {
+            String jugadorLocal = jugadores.get(i).getNombre();
 
-        DatosVisuales datosVisuales = new DatosVisuales(datosJuego, ID_LOCAL, TODOS_LOCALES, Styles.LADO_AREA_TABLERO);
-        datosJuego.agregarObservador(datosVisuales);
-        ControlModelo controlModelo = new ControlModelo(datosVisuales, controlJuego);
+            // Modelo de Presentación
+            TraductorModeloJuego traductor = new TraductorModeloJuego(tamanoCelda, MARGEN);
+            for (int k = 0; k < jugadores.size(); k++) {          // todos con los mismos colores
+                traductor.asignarColor(jugadores.get(k).getId(), PaletaColor.DISPONIBLES.get(k));
+            }
+            ReceptorMovimientos receptor = new ReceptorMovimientos(modeloJuego, traductor, jugadorLocal);
+            modeloJuego.agregarObservador(receptor);              // el receptor observa al juego
+            ControlModeloPresentacion controlMP =
+                    new ControlModeloPresentacion(modeloJuego, modeloJuego, traductor, jugadorLocal);
+            FachadaModeloPresentacion modeloPresentacion = new FachadaModeloPresentacion(controlMP, receptor);
 
-        FrmJuego frmJuego = new FrmJuego(datosVisuales);
-        datosVisuales.agregarObservador(frmJuego);
+            // Controlador y vistas
+            ControlEjercerTurno control = new ControlEjercerTurno(modeloPresentacion);
+            VistaTablero vistaTablero = new VistaTablero(modeloPresentacion, ladoTablero, tamanoCelda);
+            vistaTablero.setControlador(control);
+            VistaJugadores vistaJugadores = new VistaJugadores(modeloPresentacion);
+            modeloPresentacion.agregarObservador(vistaTablero);   // las vistas observan al MP
+            modeloPresentacion.agregarObservador(vistaJugadores);
 
-        ControlEjercerTurno controlVista = new ControlEjercerTurno(controlModelo, () -> {
-            publicador.detener();
-            datosJuego.quitarObservador(datosVisuales);
-            datosVisuales.quitarObservador(frmJuego);
-            frmJuego.dispose();
-            menu.mostrar();
-        });
-        frmJuego.setControl(controlVista);
+            new FrmJuego(jugadorLocal, vistaTablero, vistaJugadores).mostrar(i);
+            receptores.add(receptor);
+        }
 
-        menu.ocultar();
-        frmJuego.mostrar();
+        // ---------- Estado inicial: puntos en gris y jugadores ----------
+        for (ReceptorMovimientos receptor : receptores) {
+            receptor.cargarEstadoInicial();
+        }
     }
 }
