@@ -4,7 +4,7 @@ import java.util.Random;
 import controlador.ControlMenu;
 import controlador.ControlVista;
 import controlador.ILanzadorPartida;
-import juego.dominio.TamanioTablero;
+import juego.objetosNegocio.TamanioTablero;
 import juego.modelo.ColaAcciones;
 import juego.modelo.ControlJuego;
 import juego.modelo.DatosJuego;

@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.HashSet;
 import java.util.Map;
-import juego.dominio.Coordenada;
+import juego.objetosNegocio.Coordenada;
 import juego.modelo.IControlJuego;
 
 public class ControlModelo implements IControlModelo {

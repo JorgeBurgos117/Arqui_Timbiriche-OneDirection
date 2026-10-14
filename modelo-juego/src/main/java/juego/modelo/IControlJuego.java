@@ -1,7 +1,7 @@
 package juego.modelo;
 
-import juego.dominio.Accion;
-import juego.dominio.Coordenada;
+import juego.objetosNegocio.Accion;
+import juego.objetosNegocio.Coordenada;
 
 public interface IControlJuego {
 

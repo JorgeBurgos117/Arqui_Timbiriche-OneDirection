@@ -1,6 +1,6 @@
 package juego.modelo;
 
-import juego.dominio.EstadoJuego;
+import juego.objetosNegocio.EstadoJuego;
 
 public interface IModeloJuego {
 

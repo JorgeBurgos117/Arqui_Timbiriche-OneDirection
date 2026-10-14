@@ -1,4 +1,4 @@
-package juego.dominio;
+package juego.objetosNegocio;
 
 import java.util.List;
 import java.util.Map;

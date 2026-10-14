@@ -2,10 +2,10 @@ package juego.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import juego.dominio.Accion;
-import juego.dominio.Arista;
-import juego.dominio.Coordenada;
-import juego.dominio.MotivoFin;
+import juego.objetosNegocio.Accion;
+import juego.objetosNegocio.Arista;
+import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.MotivoFin;
 
 public class ControlJuego implements IControlJuego {
 

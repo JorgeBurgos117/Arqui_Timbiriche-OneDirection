@@ -1,4 +1,4 @@
-package juego.dominio;
+package juego.objetosNegocio;
 
 public enum TamanioTablero {
     DOS_JUGADORES(2, 10),

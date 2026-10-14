@@ -1,4 +1,4 @@
-package juego.dominio;
+package juego.objetosNegocio;
 
 import java.io.Serializable;
 

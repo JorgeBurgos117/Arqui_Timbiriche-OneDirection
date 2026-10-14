@@ -11,11 +11,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.SwingUtilities;
-import juego.dominio.Arista;
-import juego.dominio.Coordenada;
-import juego.dominio.EstadoJuego;
-import juego.dominio.JugadorInfo;
-import juego.dominio.PropuestaFin;
+import juego.objetosNegocio.Arista;
+import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.EstadoJuego;
+import juego.objetosNegocio.JugadorInfo;
+import juego.objetosNegocio.PropuestaFin;
 import juego.modelo.IModeloJuego;
 import juego.modelo.IObservadorJuego;
 

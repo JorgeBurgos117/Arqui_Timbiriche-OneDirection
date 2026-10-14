@@ -2,8 +2,8 @@ package modelo;
 
 import java.util.List;
 import java.util.Set;
-import juego.dominio.Arista;
-import juego.dominio.Coordenada;
+import juego.objetosNegocio.Arista;
+import juego.objetosNegocio.Coordenada;
 
 public interface IModeloVista {
 

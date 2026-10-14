@@ -1,4 +1,4 @@
-package juego.dominio;
+package juego.objetosNegocio;
 
 public enum MotivoFin {
     TABLERO_LLENO,

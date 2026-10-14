@@ -1,6 +1,6 @@
 package modelo;
 
-import juego.dominio.Coordenada;
+import juego.objetosNegocio.Coordenada;
 
 public final class GeometriaTablero {
 

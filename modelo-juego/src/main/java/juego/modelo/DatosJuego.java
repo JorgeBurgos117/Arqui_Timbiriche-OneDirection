@@ -9,14 +9,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import juego.dominio.Arista;
-import juego.dominio.Coordenada;
-import juego.dominio.EstadoJuego;
-import juego.dominio.EstadoPartida;
-import juego.dominio.JugadorInfo;
-import juego.dominio.MotivoFin;
-import juego.dominio.PropuestaFin;
-import juego.dominio.TamanioTablero;
+import juego.objetosNegocio.Arista;
+import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.EstadoJuego;
+import juego.objetosNegocio.EstadoPartida;
+import juego.objetosNegocio.JugadorInfo;
+import juego.objetosNegocio.MotivoFin;
+import juego.objetosNegocio.PropuestaFin;
+import juego.objetosNegocio.TamanioTablero;
 
 public class DatosJuego implements IModeloJuego {
 

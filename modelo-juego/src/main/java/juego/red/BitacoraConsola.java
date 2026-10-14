@@ -1,6 +1,6 @@
 package juego.red;
 
-import juego.dominio.Accion;
+import juego.objetosNegocio.Accion;
 
 public class BitacoraConsola implements IObservadorRed {
 

@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import juego.dominio.TamanioTablero;
+import juego.objetosNegocio.TamanioTablero;
 
 public class ModeloMenu {
 
