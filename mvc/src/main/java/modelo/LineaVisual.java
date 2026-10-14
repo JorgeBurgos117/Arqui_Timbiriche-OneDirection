@@ -1,6 +1,6 @@
 package modelo;
 
-import juego.objetosNegocio.Arista;
+import juego.objetosNegocio.Linea;
 
-public record LineaVisual(Arista arista, PaletaColor paleta) {
+public record LineaVisual(Linea arista, PaletaColor paleta) {
 }

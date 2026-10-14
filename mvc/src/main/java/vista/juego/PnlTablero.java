@@ -17,8 +17,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.Set;
 import javax.swing.JPanel;
 import controlador.IControlVista;
-import juego.objetosNegocio.Arista;
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Linea;
+import juego.objetosNegocio.Punto;
 import modelo.CuadroVisual;
 import modelo.GeometriaTablero;
 import modelo.IModeloVista;
@@ -126,7 +126,7 @@ public class PnlTablero extends JPanel {
     }
 
     private void pintarPreview(Graphics2D g2, GeometriaTablero geo) {
-        Arista preview = modelo.getLineaPreview();
+        Linea preview = modelo.getLineaPreview();
         PaletaColor paleta = modelo.getPaletaTurno();
         if (preview != null && paleta != null) {
             g2.setColor(paleta.getPastel());
@@ -134,7 +134,7 @@ public class PnlTablero extends JPanel {
         }
     }
 
-    private void dibujarArista(Graphics2D g2, GeometriaTablero geo, Arista arista) {
+    private void dibujarArista(Graphics2D g2, GeometriaTablero geo, Linea arista) {
         g2.draw(new Line2D.Double(
                 geo.x(arista.a().columna()), geo.y(arista.a().fila()),
                 geo.x(arista.b().columna()), geo.y(arista.b().fila())));
@@ -142,13 +142,13 @@ public class PnlTablero extends JPanel {
 
     private void pintarPuntos(Graphics2D g2, GeometriaTablero geo) {
         PaletaColor paleta = modelo.getPaletaTurno();
-        Coordenada seleccion = modelo.getSeleccion();
-        Set<Coordenada> candidatos = modelo.getCandidatos();
-        Coordenada hover = modelo.getHover();
+        Punto seleccion = modelo.getSeleccion();
+        Set<Punto> candidatos = modelo.getCandidatos();
+        Punto hover = modelo.getHover();
 
         for (int f = 0; f < geo.getFilas(); f++) {
             for (int c = 0; c < geo.getColumnas(); c++) {
-                Coordenada punto = new Coordenada(f, c);
+                Punto punto = new Punto(f, c);
                 Color color = Styles.COLOR_PUNTO_NEUTRO;
                 double diametro = geo.diametroPunto();
 

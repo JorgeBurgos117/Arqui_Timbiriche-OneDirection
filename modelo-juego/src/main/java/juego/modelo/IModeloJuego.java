@@ -1,7 +1,5 @@
 package juego.modelo;
 
-import juego.objetosNegocio.EstadoJuego;
-
 public interface IModeloJuego {
 
     EstadoJuego get();

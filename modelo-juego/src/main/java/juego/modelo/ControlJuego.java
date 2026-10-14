@@ -2,10 +2,9 @@ package juego.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import juego.objetosNegocio.Accion;
-import juego.objetosNegocio.Arista;
-import juego.objetosNegocio.Coordenada;
-import juego.objetosNegocio.MotivoFin;
+
+import juego.objetosNegocio.Linea;
+import juego.objetosNegocio.Punto;
 
 public class ControlJuego implements IControlJuego {
 
@@ -18,11 +17,11 @@ public class ControlJuego implements IControlJuego {
     }
 
     @Override
-    public synchronized void validar(Coordenada punto, int idJugador) {
+    public synchronized void validar(Punto punto, int idJugador) {
         if (!puedeJugar(idJugador) || !datos.dentro(punto)) {
             return;
         }
-        Coordenada seleccion = datos.getSeleccion();
+        Punto seleccion = datos.getSeleccion();
         Accion accion;
 
         if (seleccion != null && punto.equals(seleccion)) {
@@ -95,7 +94,7 @@ public class ControlJuego implements IControlJuego {
     }
 
     private void trazarLinea(Accion.TrazarLinea t) {
-        Arista arista = new Arista(t.a(), t.b());
+        Linea arista = new Linea(t.a(), t.b());
         if (datos.existeLinea(arista)) {
             return;
         }
@@ -103,7 +102,7 @@ public class ControlJuego implements IControlJuego {
         datos.setSeleccion(null);
 
         int cerrados = 0;
-        for (Coordenada esquina : cuadrosVecinos(arista)) {
+        for (Punto esquina : cuadrosVecinos(arista)) {
             if (datos.esCuadroValido(esquina) && !datos.cuadroAsignado(esquina) && datos.cuadroCerrado(esquina)) {
                 datos.asignarCuadro(esquina, t.idJugador());
                 cerrados++;
@@ -117,16 +116,16 @@ public class ControlJuego implements IControlJuego {
         }
     }
 
-    private List<Coordenada> cuadrosVecinos(Arista arista) {
+    private List<Punto> cuadrosVecinos(Linea arista) {
         int f = arista.a().fila();
         int c = arista.a().columna();
-        List<Coordenada> lista = new ArrayList<>(2);
+        List<Punto> lista = new ArrayList<>(2);
         if (arista.esHorizontal()) {
-            lista.add(new Coordenada(f - 1, c));
-            lista.add(new Coordenada(f, c));
+            lista.add(new Punto(f - 1, c));
+            lista.add(new Punto(f, c));
         } else {
-            lista.add(new Coordenada(f, c - 1));
-            lista.add(new Coordenada(f, c));
+            lista.add(new Punto(f, c - 1));
+            lista.add(new Punto(f, c));
         }
         return lista;
     }

@@ -1,7 +1,5 @@
 package juego.red;
 
-import juego.objetosNegocio.Accion;
-
 public class BitacoraConsola implements IObservadorRed {
 
     @Override

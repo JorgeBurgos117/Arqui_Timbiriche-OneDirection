@@ -2,7 +2,7 @@ package juego.red;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import juego.objetosNegocio.Accion;
+
 import juego.modelo.ColaAcciones;
 
 public class PublicadorAcciones {

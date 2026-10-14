@@ -2,7 +2,6 @@ package juego.modelo;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import juego.objetosNegocio.Accion;
 
 public class ColaAcciones {
 

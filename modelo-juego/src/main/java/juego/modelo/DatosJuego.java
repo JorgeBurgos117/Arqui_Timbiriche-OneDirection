@@ -9,14 +9,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import juego.objetosNegocio.Arista;
-import juego.objetosNegocio.Coordenada;
-import juego.objetosNegocio.EstadoJuego;
+import juego.objetosNegocio.Linea;
+import juego.objetosNegocio.Punto;
 import juego.objetosNegocio.EstadoPartida;
-import juego.objetosNegocio.JugadorInfo;
-import juego.objetosNegocio.MotivoFin;
-import juego.objetosNegocio.PropuestaFin;
-import juego.objetosNegocio.TamanioTablero;
 
 public class DatosJuego implements IModeloJuego {
 
@@ -44,9 +39,9 @@ public class DatosJuego implements IModeloJuego {
     private final List<Integer> ordenTurnos;
     private int indiceTurno = 0;
 
-    private final Map<Arista, Integer> lineas = new LinkedHashMap<>();
-    private final Map<Coordenada, Integer> cuadros = new LinkedHashMap<>();
-    private Coordenada seleccion;
+    private final Map<Linea, Integer> lineas = new LinkedHashMap<>();
+    private final Map<Punto, Integer> cuadros = new LinkedHashMap<>();
+    private Punto seleccion;
 
     private EstadoPartida estado = EstadoPartida.EN_CURSO;
     private MotivoFin motivoFin;
@@ -84,7 +79,7 @@ public class DatosJuego implements IModeloJuego {
         PropuestaFin propuesta = idProponenteFin == null
                 ? null
                 : new PropuestaFin(idProponenteFin, new ArrayList<>(pendientesFin));
-        List<Coordenada> candidatos = seleccion == null ? List.of() : candidatosDe(seleccion);
+        List<Punto> candidatos = seleccion == null ? List.of() : candidatosDe(seleccion);
 
         return new EstadoJuego(filas, columnas, lista, idEnTurno(), lineas, cuadros,
                 seleccion, candidatos, estado, motivoFin, idGanador, propuesta, propuestasRechazadas);
@@ -134,53 +129,53 @@ public class DatosJuego implements IModeloJuego {
         return activos;
     }
 
-    synchronized Coordenada getSeleccion() {
+    synchronized Punto getSeleccion() {
         return seleccion;
     }
 
-    synchronized boolean dentro(Coordenada c) {
+    synchronized boolean dentro(Punto c) {
         return c.fila() >= 0 && c.fila() < filas && c.columna() >= 0 && c.columna() < columnas;
     }
 
-    synchronized boolean existeLinea(Arista arista) {
+    synchronized boolean existeLinea(Linea arista) {
         return lineas.containsKey(arista);
     }
 
-    synchronized List<Coordenada> candidatosDe(Coordenada origen) {
-        List<Coordenada> lista = new ArrayList<>(4);
-        agregarSiLibre(lista, origen, new Coordenada(origen.fila() - 1, origen.columna()));
-        agregarSiLibre(lista, origen, new Coordenada(origen.fila() + 1, origen.columna()));
-        agregarSiLibre(lista, origen, new Coordenada(origen.fila(), origen.columna() - 1));
-        agregarSiLibre(lista, origen, new Coordenada(origen.fila(), origen.columna() + 1));
+    synchronized List<Punto> candidatosDe(Punto origen) {
+        List<Punto> lista = new ArrayList<>(4);
+        agregarSiLibre(lista, origen, new Punto(origen.fila() - 1, origen.columna()));
+        agregarSiLibre(lista, origen, new Punto(origen.fila() + 1, origen.columna()));
+        agregarSiLibre(lista, origen, new Punto(origen.fila(), origen.columna() - 1));
+        agregarSiLibre(lista, origen, new Punto(origen.fila(), origen.columna() + 1));
         return lista;
     }
 
-    private void agregarSiLibre(List<Coordenada> lista, Coordenada origen, Coordenada destino) {
-        if (dentro(destino) && !lineas.containsKey(new Arista(origen, destino))) {
+    private void agregarSiLibre(List<Punto> lista, Punto origen, Punto destino) {
+        if (dentro(destino) && !lineas.containsKey(new Linea(origen, destino))) {
             lista.add(destino);
         }
     }
 
-    synchronized boolean esCuadroValido(Coordenada esquina) {
+    synchronized boolean esCuadroValido(Punto esquina) {
         return esquina.fila() >= 0 && esquina.fila() < filas - 1
                 && esquina.columna() >= 0 && esquina.columna() < columnas - 1;
     }
 
-    synchronized boolean cuadroAsignado(Coordenada esquina) {
+    synchronized boolean cuadroAsignado(Punto esquina) {
         return cuadros.containsKey(esquina);
     }
 
-    synchronized boolean cuadroCerrado(Coordenada esquina) {
+    synchronized boolean cuadroCerrado(Punto esquina) {
         int f = esquina.fila();
         int c = esquina.columna();
-        Coordenada supIzq = new Coordenada(f, c);
-        Coordenada supDer = new Coordenada(f, c + 1);
-        Coordenada infIzq = new Coordenada(f + 1, c);
-        Coordenada infDer = new Coordenada(f + 1, c + 1);
-        return lineas.containsKey(new Arista(supIzq, supDer))
-                && lineas.containsKey(new Arista(infIzq, infDer))
-                && lineas.containsKey(new Arista(supIzq, infIzq))
-                && lineas.containsKey(new Arista(supDer, infDer));
+        Punto supIzq = new Punto(f, c);
+        Punto supDer = new Punto(f, c + 1);
+        Punto infIzq = new Punto(f + 1, c);
+        Punto infDer = new Punto(f + 1, c + 1);
+        return lineas.containsKey(new Linea(supIzq, supDer))
+                && lineas.containsKey(new Linea(infIzq, infDer))
+                && lineas.containsKey(new Linea(supIzq, infIzq))
+                && lineas.containsKey(new Linea(supDer, infDer));
     }
 
     synchronized boolean tableroLleno() {
@@ -207,15 +202,15 @@ public class DatosJuego implements IModeloJuego {
         return pendientesFin.isEmpty();
     }
 
-    synchronized void setSeleccion(Coordenada punto) {
+    synchronized void setSeleccion(Punto punto) {
         this.seleccion = punto;
     }
 
-    synchronized void agregarLinea(Arista arista, int idJugador) {
+    synchronized void agregarLinea(Linea arista, int idJugador) {
         lineas.put(arista, idJugador);
     }
 
-    synchronized void asignarCuadro(Coordenada esquina, int idJugador) {
+    synchronized void asignarCuadro(Punto esquina, int idJugador) {
         cuadros.put(esquina, idJugador);
         jugadores.get(idJugador).puntos++;
     }

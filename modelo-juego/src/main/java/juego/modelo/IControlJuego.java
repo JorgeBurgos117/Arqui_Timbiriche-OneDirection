@@ -1,11 +1,10 @@
 package juego.modelo;
 
-import juego.objetosNegocio.Accion;
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Punto;
 
 public interface IControlJuego {
 
-    void validar(Coordenada punto, int idJugador);
+    void validar(Punto punto, int idJugador);
 
     void cancelarSeleccion(int idJugador);
 

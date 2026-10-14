@@ -1,6 +1,6 @@
 package modelo;
 
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Punto;
 
-public record CuadroVisual(Coordenada esquina, PaletaColor paleta, char inicial) {
+public record CuadroVisual(Punto esquina, PaletaColor paleta, char inicial) {
 }
