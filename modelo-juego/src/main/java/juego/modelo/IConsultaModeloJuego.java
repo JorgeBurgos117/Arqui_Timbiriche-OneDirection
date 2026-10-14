@@ -1,19 +1,19 @@
 package juego.modelo;
 
-import juego.objetosNegocio.EstadoJuego;
+import juego.objetosNegocio.*;
+
+import java.util.List;
 
 public interface IConsultaModeloJuego {
 
-    EstadoJuego get();
 
-    void getFilas();
-    void getColumnas();
+    int getFilas();
+    int getColumnas();
     List<Linea> getLineasMarcadas();
-    List<Fila> getFilas();
     List<Cuadro> getCuadros();
     PuntoSeleccionado getPuntoSeleccionado();
     Jugada getUltimaJugada();
-    List<Jugadores> getJugadores();
+    List<Jugador> getJugadores();
     Jugador getJugadorActual();
     EstadoPartida getEstadoPartida();
     String getMotivoRechazo();

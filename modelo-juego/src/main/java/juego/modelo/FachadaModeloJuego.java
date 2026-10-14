@@ -1,13 +1,8 @@
 package juego.modelo;
 
+import juego.objetosNegocio.*;
+
 import java.util.List;
-import modelojuego.objetosnegocio.Cuadro;
-import modelojuego.objetosnegocio.EstadoPartida;
-import modelojuego.objetosnegocio.Jugada;
-import modelojuego.objetosnegocio.Jugador;
-import modelojuego.objetosnegocio.Linea;
-import modelojuego.objetosnegocio.Partida;
-import modelojuego.objetosnegocio.PuntoSeleccionado;
 
 public class FachadaModeloJuego extends SujetoObservado
         implements IOperacionesModeloJuego, IConsultaModeloJuego {
@@ -36,7 +31,7 @@ public class FachadaModeloJuego extends SujetoObservado
             notificarObservadores(EventoModelo.PARTIDA_TERMINADA);
         }
     }
-    
+
     @Override
     public synchronized int getFilas() {
         return partida.getTablero().getFilas();
