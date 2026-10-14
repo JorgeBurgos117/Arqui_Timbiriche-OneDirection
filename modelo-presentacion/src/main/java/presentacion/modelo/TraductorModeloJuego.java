@@ -20,12 +20,12 @@ public class TraductorModeloJuego {
         paletas.put(idJugador, paleta);
     }
 
-    public Color colorDe(Jugador jugador) {            // líneas, cuadros, punto seleccionado
+    public Color colorDe(Jugador jugador) { // líneas, cuadros, punto seleccionado
         PaletaColor p = jugador == null ? null : paletas.get(jugador.getId());
         return p == null ? Color.GRAY : p.getFuerte();
     }
 
-    public Color colorClaroDe(Jugador jugador) {       // puntos posibles
+    public Color colorClaroDe(Jugador jugador) { // puntos posibles
         PaletaColor p = jugador == null ? null : paletas.get(jugador.getId());
         return p == null ? Color.LIGHT_GRAY : p.getPastel();
     }
@@ -69,7 +69,15 @@ public class TraductorModeloJuego {
         return new FiguraDTO(TipoFigura.CUADRO,
                 x(cuadro.getColumna()), y(cuadro.getFila()),
                 x(cuadro.getColumna() + 1), y(cuadro.getFila() + 1),
-                colorDe(cuadro.getJugador()));
+                colorDe(cuadro.getJugador()), inicialDe(cuadro.getJugador()));
+    }
+
+    /** Primera letra del nombre, en mayúscula (la que se escribe dentro del cuadro). */
+    private String inicialDe(Jugador jugador) {
+        if (jugador == null || jugador.getNombre() == null || jugador.getNombre().isBlank()) {
+            return "";
+        }
+        return jugador.getNombre().trim().substring(0, 1).toUpperCase();
     }
 
     public JugadorDTO aJugadorDTO(Jugador jugador, boolean enTurno) {

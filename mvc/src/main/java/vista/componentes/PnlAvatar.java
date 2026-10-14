@@ -35,16 +35,22 @@ public class PnlAvatar extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         int d = Math.min(getWidth(), getHeight());
-        int x0 = (getWidth() - d) / 2;
-        int y0 = (getHeight() - d) / 2;
+        dibujar(g2, (getWidth() - d) / 2, (getHeight() - d) / 2, d, colorFondo, colorSilueta, colorBorde);
+        g2.dispose();
+    }
 
-        g2.setColor(colorFondo);
+    /**
+     * Dibuja el avatar (círculo con silueta) de diámetro d en (x0, y0).
+     * Es estático para que PnlJugador lo pueda dibujar del tamaño que necesite.
+     */
+    public static void dibujar(Graphics2D g, int x0, int y0, int d, Color fondo, Color silueta, Color borde) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setColor(fondo);
         g2.fillOval(x0, y0, d, d);
 
-        g2.setClip(new java.awt.geom.Ellipse2D.Double(x0, y0, d, d));
-        g2.setColor(colorSilueta);
+        g2.clip(new java.awt.geom.Ellipse2D.Double(x0, y0, d, d));
+        g2.setColor(silueta);
         int diamCabeza = Math.round(d * 0.30f);
         int xCabeza = x0 + (d - diamCabeza) / 2;
         int yCabeza = y0 + Math.round(d * 0.20f);
@@ -55,13 +61,14 @@ public class PnlAvatar extends JPanel {
         int xCuerpo = x0 + (d - anchoCuerpo) / 2;
         int yCuerpo = y0 + Math.round(d * 0.56f);
         g2.fillArc(xCuerpo, yCuerpo, anchoCuerpo, altoCuerpo, 0, 180);
-        g2.setClip(null);
-
-        g2.setColor(colorBorde);
-        g2.setStroke(new BasicStroke(Styles.GROSOR_BORDE_AVATAR));
-        int off = Styles.GROSOR_BORDE_AVATAR / 2;
-        g2.drawOval(x0 + off, y0 + off, d - Styles.GROSOR_BORDE_AVATAR, d - Styles.GROSOR_BORDE_AVATAR);
-
         g2.dispose();
+
+        // el grosor del borde también es proporcional (3 px cuando el avatar mide 80)
+        float grosor = Math.max(1.5f, Styles.GROSOR_BORDE_AVATAR * d / (float) Styles.DIAMETRO_AVATAR);
+        Graphics2D gb = (Graphics2D) g.create();
+        gb.setColor(borde);
+        gb.setStroke(new BasicStroke(grosor));
+        gb.draw(new java.awt.geom.Ellipse2D.Double(x0 + grosor / 2, y0 + grosor / 2, d - grosor, d - grosor));
+        gb.dispose();
     }
 }

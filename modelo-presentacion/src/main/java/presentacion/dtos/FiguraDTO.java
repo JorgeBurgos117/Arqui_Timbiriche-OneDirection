@@ -10,14 +10,20 @@ public class FiguraDTO {
     private int x2;
     private int y2;
     private Color color;
+    private String texto;   // solo lo usan los cuadros: la inicial del jugador que lo cerró
 
     public FiguraDTO(TipoFigura tipo, int x1, int y1, int x2, int y2, Color color) {
+        this(tipo, x1, y1, x2, y2, color, null);
+    }
+
+    public FiguraDTO(TipoFigura tipo, int x1, int y1, int x2, int y2, Color color, String texto) {
         this.tipo = tipo;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.color = color;
+        this.texto = texto;
     }
 
     public String getClave() {
@@ -75,4 +81,12 @@ public class FiguraDTO {
         this.color = color;
     }
 
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
 }

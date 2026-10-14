@@ -112,6 +112,9 @@ public class ReceptorMovimientos implements IObservadorModeloJuego {
     }
 
     private void encolarJugadores() {
+        // De los jugadores solo importa la foto más reciente: si la vista todavía no sacó
+        // la anterior (por ejemplo JUGADA_REALIZADA y PARTIDA_TERMINADA seguidas), se descarta.
+        colaJugadores.clear();
         Jugador actual = consultaJuego.getJugadorActual();
         List<Jugador> todos = consultaJuego.getJugadores();
         // Empieza por el jugador local (la vista lo pone abajo) y sigue en orden de turno
