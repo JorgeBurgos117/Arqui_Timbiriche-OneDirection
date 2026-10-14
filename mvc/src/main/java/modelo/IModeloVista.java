@@ -2,8 +2,8 @@ package modelo;
 
 import java.util.List;
 import java.util.Set;
-import juego.objetosNegocio.Arista;
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Linea;
+import juego.objetosNegocio.Punto;
 
 public interface IModeloVista {
 
@@ -21,13 +21,13 @@ public interface IModeloVista {
 
     List<CuadroVisual> getCuadros();
 
-    Coordenada getSeleccion();
+    Punto getSeleccion();
 
-    Set<Coordenada> getCandidatos();
+    Set<Punto> getCandidatos();
 
-    Coordenada getHover();
+    Punto getHover();
 
-    Arista getLineaPreview();
+    Linea getLineaPreview();
 
     PaletaColor getPaletaTurno();
 

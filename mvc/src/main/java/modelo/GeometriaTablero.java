@@ -1,6 +1,6 @@
 package modelo;
 
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Punto;
 
 public final class GeometriaTablero {
 
@@ -43,7 +43,7 @@ public final class GeometriaTablero {
         return MARGEN + fila * espaciado;
     }
 
-    public Coordenada aCoordenada(int px, int py) {
+    public Punto aCoordenada(int px, int py) {
         int columna = (int) Math.round((px - MARGEN) / espaciado);
         int fila = (int) Math.round((py - MARGEN) / espaciado);
         if (fila < 0 || fila >= filas || columna < 0 || columna >= columnas) {
@@ -52,7 +52,7 @@ public final class GeometriaTablero {
         double dx = px - x(columna);
         double dy = py - y(fila);
         double radio = espaciado * RADIO_CLICK;
-        return dx * dx + dy * dy <= radio * radio ? new Coordenada(fila, columna) : null;
+        return dx * dx + dy * dy <= radio * radio ? new Punto(fila, columna) : null;
     }
 
     public double grosorLinea() {

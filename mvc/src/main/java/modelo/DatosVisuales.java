@@ -11,11 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.SwingUtilities;
-import juego.objetosNegocio.Arista;
-import juego.objetosNegocio.Coordenada;
-import juego.objetosNegocio.EstadoJuego;
-import juego.objetosNegocio.JugadorInfo;
-import juego.objetosNegocio.PropuestaFin;
+import juego.objetosNegocio.Linea;
+import juego.objetosNegocio.Punto;
 import juego.modelo.IModeloJuego;
 import juego.modelo.IObservadorJuego;
 
@@ -32,7 +29,7 @@ public class DatosVisuales implements IModeloVista, IObservadorJuego {
     private final List<Aviso> avisos = new ArrayList<>();
 
     private EstadoJuego estado;
-    private Coordenada hover;
+    private Punto hover;
 
     public DatosVisuales(IModeloJuego modeloJuego, int idLocal, boolean todosLocales, int ladoTablero) {
         this.modeloJuego = modeloJuego;
@@ -116,7 +113,7 @@ public class DatosVisuales implements IModeloVista, IObservadorJuego {
         return todosLocales || idJugador == idLocal;
     }
 
-    void setHover(Coordenada punto) {
+    void setHover(Punto punto) {
         if (!Objects.equals(hover, punto)) {
             hover = punto;
             notificar();
@@ -180,27 +177,27 @@ public class DatosVisuales implements IModeloVista, IObservadorJuego {
     }
 
     @Override
-    public Coordenada getSeleccion() {
+    public Punto getSeleccion() {
         return estado.seleccion();
     }
 
     @Override
-    public Set<Coordenada> getCandidatos() {
+    public Set<Punto> getCandidatos() {
         return new HashSet<>(estado.candidatos());
     }
 
     @Override
-    public Coordenada getHover() {
+    public Punto getHover() {
         return hover;
     }
 
     @Override
-    public Arista getLineaPreview() {
-        Coordenada seleccion = estado.seleccion();
+    public Linea getLineaPreview() {
+        Punto seleccion = estado.seleccion();
         if (seleccion == null || hover == null || !estado.candidatos().contains(hover)) {
             return null;
         }
-        return new Arista(seleccion, hover);
+        return new Linea(seleccion, hover);
     }
 
     @Override

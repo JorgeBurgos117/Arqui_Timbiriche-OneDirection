@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.HashSet;
 import java.util.Map;
-import juego.objetosNegocio.Coordenada;
+import juego.objetosNegocio.Punto;
 import juego.modelo.IControlJuego;
 
 public class ControlModelo implements IControlModelo {
@@ -17,7 +17,7 @@ public class ControlModelo implements IControlModelo {
 
     @Override
     public void validar(int x, int y) {
-        Coordenada punto = datos.getGeometria().aCoordenada(x, y);
+        Punto punto = datos.getGeometria().aCoordenada(x, y);
         Integer id = datos.idActuante();
         if (punto != null && id != null) {
             controlJuego.validar(punto, id);
