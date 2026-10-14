@@ -11,4 +11,6 @@ public interface IConsultaModeloPresentacion {
     List<JugadorDTO> getJugadores();
     String getMensajeAdvertencia();
     boolean esMiTurno();
+    void agregarObservador(IObservadorPresentacion observador);
+    void eliminarObservador(IObservadorPresentacion observador);
 }
