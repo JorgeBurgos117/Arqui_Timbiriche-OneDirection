@@ -88,13 +88,16 @@ public class ReceptorMovimientos implements IObservadorModeloJuego {
         apagarResaltados();
         PuntoSeleccionado sel = consultaJuego.getPuntoSeleccionado();
         if (sel == null) {
-            return; // se deseleccionó: con apagar basta
+            return; // se deseleccionó
         }
-        Color color = traductor.colorDe(consultaJuego.getJugadorActual());
-        colaFiguras.add(traductor.aFiguraPunto(sel.getPunto(), color));
+        Jugador actual = consultaJuego.getJugadorActual();
+        Color fuerte = traductor.colorDe(actual); // punto seleccionado
+        Color claro  = traductor.colorClaroDe(actual); // puntos posibles
+
+        colaFiguras.add(traductor.aFiguraPunto(sel.getPunto(), fuerte));
         puntosResaltados.add(sel.getPunto());
-        for (Punto posible : sel.getPosibles()) {          // de 1 a 4 puntos disponibles
-            colaFiguras.add(traductor.aFiguraPunto(posible, color.brighter()));
+        for (Punto posible : sel.getPosibles()) { // de 1 a 4 puntos disponibles
+            colaFiguras.add(traductor.aFiguraPunto(posible, claro));
             puntosResaltados.add(posible);
         }
     }

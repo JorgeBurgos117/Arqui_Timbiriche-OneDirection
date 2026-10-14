@@ -14,19 +14,25 @@ public class TraductorModeloJuego {
 
     private final int tamanoCelda;
     private final int margen;
-    private final Map<Integer, Color> colores = new HashMap<>();
+    private final Map<Integer, PaletaColor> paletas = new HashMap<>();
+
+    public void asignarColor(int idJugador, PaletaColor paleta) {
+        paletas.put(idJugador, paleta);
+    }
+
+    public Color colorDe(Jugador jugador) {            // líneas, cuadros, punto seleccionado
+        PaletaColor p = jugador == null ? null : paletas.get(jugador.getId());
+        return p == null ? Color.GRAY : p.getFuerte();
+    }
+
+    public Color colorClaroDe(Jugador jugador) {       // puntos posibles
+        PaletaColor p = jugador == null ? null : paletas.get(jugador.getId());
+        return p == null ? Color.LIGHT_GRAY : p.getPastel();
+    }
 
     public TraductorModeloJuego(int tamanoCelda, int margen) {
         this.tamanoCelda = tamanoCelda;
         this.margen = margen;
-    }
-
-    public void asignarColor(int idJugador, Color color) {
-        colores.put(idJugador, color);
-    }
-
-    public Color colorDe(Jugador jugador) {
-        return jugador == null ? Color.GRAY : colores.getOrDefault(jugador.getId(), Color.GRAY);
     }
 
     //Fila del punto más cercano al clic, o -1 si el clic no cayó cerca de ningún punto.
