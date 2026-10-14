@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import controlador.IControlMenu;
+
 import modelo.ModeloMenu;
 import modelo.OpcionPartida;
 import vista.componentes.BtnRedondeado;
