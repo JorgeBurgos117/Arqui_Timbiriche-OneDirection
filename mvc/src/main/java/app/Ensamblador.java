@@ -25,7 +25,7 @@ public class Ensamblador {
     private static final int MARGEN = 20;
 
     public void ensamblar() {
-        // ---------- Modelo de Juego (uno solo) ----------
+        // Modelo de Juego (uno solo)
         List<Jugador> jugadores = new ArrayList<>();
         for (int i = 0; i < NOMBRES.size(); i++) {
             jugadores.add(new Jugador(i + 1, NOMBRES.get(i), null));
@@ -39,7 +39,7 @@ public class Ensamblador {
 
         List<ReceptorMovimientos> receptores = new ArrayList<>();
 
-        // ---------- Por cada jugador ----------
+        // Por cada jugador
         for (int i = 0; i < jugadores.size(); i++) {
             String jugadorLocal = jugadores.get(i).getNombre();
 
@@ -66,7 +66,7 @@ public class Ensamblador {
             receptores.add(receptor);
         }
 
-        // ---------- Estado inicial: puntos en gris y jugadores ----------
+        // Estado inicial: puntos en gris y jugadores
         for (ReceptorMovimientos receptor : receptores) {
             receptor.cargarEstadoInicial();
         }
