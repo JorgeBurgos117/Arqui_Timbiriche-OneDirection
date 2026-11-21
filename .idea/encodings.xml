@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/mensajeria/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mensajeria/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modelo-juego/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modelo-juego/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modelo-presentacion/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/modelo-presentacion/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mvc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mvc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/red-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/red-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/red/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/red/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

@@ -12,6 +12,9 @@
         <module>modelo-juego</module>
         <module>mvc</module>
         <module>modelo-presentacion</module>
+        <module>red-api</module>
+        <module>red</module>
+        <module>mensajeria</module>
     </modules>
 
     <properties>
@@ -29,6 +32,21 @@
             <dependency>
                 <groupId>org.example</groupId>
                 <artifactId>modelo-presentacion</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>red-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>red</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>mensajeria</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -7,8 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="modelo-presentacion" />
-        <module name="modelo-juego" />
+        <module name="red" />
+        <module name="red-api" />
         <module name="mvc" />
+        <module name="modelo-juego" />
+        <module name="mensajeria" />
       </profile>
     </annotationProcessing>
   </component>
