@@ -1,0 +1,7 @@
+red\ServidorTCP.class
+red\Paquete.class
+red\Dispatcher.class
+red\DispatcherFactory.class
+red\Receptor.class
+red\ClienteTCP.class
+red\LengthFramer.class
